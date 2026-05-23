@@ -60,8 +60,6 @@ body{
   white-space:nowrap;
 }
 .wrap{padding:.75rem 1rem;max-width:600px;margin:0 auto}
-
-/* ── Navegação rápida ── */
 .nav{
   display:flex;
   gap:.5rem;
@@ -91,8 +89,6 @@ body{
   border-color:var(--accent);
   outline:none;
 }
-
-/* ── Combos (destaque) ── */
 .combos{
   background:var(--combo-bg);
   border:2px solid var(--combo-border);
@@ -102,8 +98,6 @@ body{
 }
 .combos h2{font-size:1.15rem;font-weight:800;margin-bottom:.75rem;color:var(--accent)}
 .combos .preco{font-size:1.4rem}
-
-/* ── Categorias ── */
 .cat{margin-bottom:1.25rem}
 .cat h2{
   font-size:1.1rem;
@@ -113,8 +107,6 @@ body{
   border-bottom:2px solid var(--accent);
   color:var(--accent);
 }
-
-/* ── Item ── */
 .item{
   display:flex;
   justify-content:space-between;
@@ -127,10 +119,8 @@ body{
 .nome{font-size:1.05rem;font-weight:600;flex:1;min-width:0}
 .desc{display:block;font-size:.8rem;font-weight:400;color:var(--muted);margin-top:.1rem}
 .preco{font-size:1.3rem;font-weight:800;color:var(--price);white-space:nowrap;flex-shrink:0}
-
 .rodape{text-align:center;padding:1.5rem 1rem;font-size:.75rem;color:var(--muted)}
 .rodape a{color:var(--accent);text-decoration:none}
-
 @media(min-width:480px){
   .wrap{padding:1rem 1.5rem}
   .nome{font-size:1.1rem}
@@ -187,60 +177,78 @@ body{
   };
 
   var COMBOS = [
-    { nome: "Combo Café",       desc: "Misto Quente + Café",             preco: "14,00" },
-    { nome: "Combo Pastel",     desc: "Pastel de Carne + Café com Leite", preco: "16,00" },
-    { nome: "Combo Reforçado",  desc: "X Burguer + Batata Simples 250g", preco: "35,00" }
+    { nome: "Combo Expresso",  desc: "Café Cheio + Pão de Queijo Grande",          preco: "9,00" },
+    { nome: "Combo Tradição",  desc: "Pingado M + Pedaço de Bolo (Milho/Leite)",   preco: "15,00" },
+    { nome: "Combo Natural",   desc: "Lanche Natural + Coca-Cola 1L",              preco: "20,00" },
+    { nome: "Combo Especial",  desc: "Salgado Especial + Café Cheio",              preco: "19,00" }
   ];
 
   var CATEGORIAS = [
     {
+      titulo: "🥖 Panificação",
+      itens: [
+        { nome: "Pão Francês",          desc: "por kg",  preco: "20,49" },
+        { nome: "Pão de Queijo",        desc: "por kg",  preco: "47,90" },
+        { nome: "Pão de Queijo Grande", desc: "unidade", preco: "6,00" }
+      ]
+    },
+    {
+      titulo: "☕ Bebidas",
+      itens: [
+        { nome: "Café Meio Copo",   preco: "4,00" },
+        { nome: "Café Copo Cheio",  preco: "5,00" },
+        { nome: "Pingado P",        preco: "7,00" },
+        { nome: "Pingado M",        preco: "8,00" },
+        { nome: "Pingado G",        preco: "9,00" },
+        { nome: "Coca-Cola 1L",     preco: "8,00" },
+        { nome: "Coca-Cola 2L",     preco: "15,00" }
+      ]
+    },
+    {
       titulo: "🍔 Lanches Artesanais",
       itens: [
         { nome: "X Bacon",     desc: "Pão, hambúrguer, bacon, ovo, presunto, mussarela, alface, tomate, milho e batata palha", preco: "26,00" },
-        { nome: "X Burguer",   desc: "Pão, hambúrguer, ovo, presunto e mussarela",   preco: "20,00" },
+        { nome: "X Burguer",   desc: "Pão, hambúrguer, ovo, presunto e mussarela",                                            preco: "20,00" },
         { nome: "X Calabresa", desc: "Pão, hambúrguer, calabresa, ovo, presunto, mussarela, alface, tomate, milho e batata palha", preco: "24,00" },
-        { nome: "X Salada",    desc: "Pão, hambúrguer, ovo, presunto, mussarela, alface e tomate", preco: "22,00" },
+        { nome: "X Salada",    desc: "Pão, hambúrguer, ovo, presunto, mussarela, alface e tomate",                            preco: "22,00" },
         { nome: "X Tudo",      desc: "Pão, hambúrguer, bacon, calabresa, salsicha, ovo, presunto, mussarela, alface e tomate", preco: "30,00" }
       ]
     },
     {
       titulo: "🥪 Lanches",
       itens: [
-        { nome: "Churrasquinho Simples",  desc: "Pão francês, carne e mussarela",                  preco: "22,00" },
-        { nome: "Churrasquinho Completo", desc: "Pão francês, carne, mussarela, alface e tomate",  preco: "25,00" },
+        { nome: "Churrasquinho Simples",  desc: "Pão francês, carne e mussarela",                   preco: "22,00" },
+        { nome: "Churrasquinho Completo", desc: "Pão francês, carne, mussarela, alface e tomate",   preco: "25,00" },
         { nome: "Misto Completo",         desc: "Pão francês, presunto, mussarela, alface e tomate", preco: "15,00" },
-        { nome: "Misto com Ovo",          desc: "Pão francês, presunto, mussarela e ovo",           preco: "12,00" },
-        { nome: "Misto Frio",             desc: "Pão francês, presunto e mussarela",                preco: "8,00" },
-        { nome: "Misto Quente",           desc: "Pão francês, presunto e mussarela",                preco: "10,00" },
-        { nome: "Pão com Carne Moída",    preco: "10,00" },
+        { nome: "Misto com Ovo",          desc: "Pão francês, presunto, mussarela e ovo",            preco: "12,00" },
+        { nome: "Misto Frio",             desc: "Pão francês, presunto e mussarela",                 preco: "8,00" },
+        { nome: "Misto Quente",           desc: "Pão francês, presunto e mussarela",                 preco: "10,00" },
+        { nome: "Pão com Carne",          preco: "12,00" },
         { nome: "Pão com Mortadela",      preco: "8,00" },
-        { nome: "Pão com Ovo",            desc: "Pão francês e dois ovos",                          preco: "10,00" },
+        { nome: "Pão com Ovo",            desc: "Pão francês e dois ovos",                           preco: "10,00" },
         { nome: "Pão com Queijo Frio",    preco: "8,00" },
-        { nome: "Pão com Queijo Quente",  preco: "10,00" }
-      ]
-    },
-    {
-      titulo: "🥗 Lanches Natural",
-      itens: [
-        { nome: "Lanche Natural Patê de Frango",  preco: "13,00" },
-        { nome: "Lanche Natural no Pão Francês",  preco: "10,00" }
+        { nome: "Pão com Queijo Quente",  preco: "10,00" },
+        { nome: "Lanche Natural",         preco: "14,00" },
+        { nome: "Lanche Patê de Frango",  preco: "15,00" }
       ]
     },
     {
       titulo: "🧆 Salgados",
       itens: [
-        { nome: "Coxinha de Carne",   preco: "10,00" },
-        { nome: "Coxinha de Frango",  preco: "10,00" },
-        { nome: "Disco de Carne",     preco: "9,00" },
-        { nome: "Hamburgão",          preco: "12,00" },
+        { nome: "Salgados Comuns",                      preco: "12,00" },
+        { nome: "Salgados Especiais", desc: "Carne Seca / Catupiry", preco: "15,00" },
+        { nome: "Coxinha de Carne",                     preco: "10,00" },
+        { nome: "Coxinha de Frango",                    preco: "10,00" },
+        { nome: "Disco de Carne",                       preco: "9,00" },
+        { nome: "Hamburgão",                            preco: "12,00" },
         { nome: "Mini Pastel",        desc: "Vendido no kg",  preco: "63,00" },
         { nome: "Mini Salgadinhos",   desc: "Vendido no kg",  preco: "42,00" },
-        { nome: "Mini Pizza",         preco: "13,00" },
-        { nome: "Presunto e Queijo",  preco: "10,00" },
-        { nome: "Risole de Carne",    preco: "10,00" },
-        { nome: "Risole de Frango",   preco: "10,00" },
-        { nome: "Salgado Assado",     preco: "10,00" },
-        { nome: "Torta (Fatia)",      preco: "10,00" }
+        { nome: "Mini Pizza",                           preco: "15,00" },
+        { nome: "Presunto e Queijo",                    preco: "10,00" },
+        { nome: "Risole de Carne",                      preco: "10,00" },
+        { nome: "Risole de Frango",                     preco: "10,00" },
+        { nome: "Salgado Assado",                       preco: "10,00" },
+        { nome: "Torta (Fatia)",                        preco: "10,00" }
       ]
     },
     {
@@ -261,23 +269,42 @@ body{
       ]
     },
     {
-      titulo: "🍽️ Jantinha",
+      titulo: "🎂 Confeitaria",
       itens: [
+        { nome: "Bolo Aniversário Tradicional", desc: "por kg",  preco: "85,00" },
+        { nome: "Bolo Aniversário Premium",     desc: "por kg",  preco: "95,00" },
+        { nome: "Bolo Bacia Vitrine",           desc: "por kg",  preco: "75,00" },
+        { nome: "Bolos Caseirinhos",            desc: "unidade", preco: "34,90" },
+        { nome: "Bolos Pedaço",                 desc: "Milho / Leite", preco: "8,00" },
+        { nome: "Bolos de Pote",                preco: "18,00" }
+      ]
+    },
+    {
+      titulo: "🍪 Secos",
+      itens: [
+        { nome: "Biscoito Parmesão", desc: "por kg", preco: "62,99" }
+      ]
+    },
+    {
+      titulo: "🍽️ Refeições",
+      itens: [
+        { nome: "Jantinha",                    preco: "30,00" },
         { nome: "Jantinha de Filé Patinho",   desc: "Arroz, feijão tropeiro, salada, filé patinho e batata frita",  preco: "27,90" },
         { nome: "Jantinha de Frango",         desc: "Arroz, feijão tropeiro, salada, filé de frango e batata frita", preco: "25,90" },
-        { nome: "Stronoff Carne ou Frango",   preco: "29,90" }
+        { nome: "Stronoff Carne ou Frango",   preco: "29,90" },
+        { nome: "Caldos",                     preco: "20,00" }
       ]
     },
     {
       titulo: "🍟 Porções",
       itens: [
-        { nome: "Batata Simples 250g",                preco: "20,00" },
-        { nome: "Batata Simples 500g",                preco: "30,00" },
-        { nome: "Batata Completa 500g",               desc: "Bacon, calabresa e cheddar",                          preco: "35,00" },
-        { nome: "Porção de Calabresa com Fritas",     preco: "30,00" },
+        { nome: "Batata Simples 250g",                 preco: "20,00" },
+        { nome: "Batata Simples 500g",                 preco: "30,00" },
+        { nome: "Batata Completa 500g",                desc: "Bacon, calabresa e cheddar",                           preco: "35,00" },
+        { nome: "Porção de Calabresa com Fritas",      preco: "30,00" },
         { nome: "Porção de Filé de Frango com Fritas", preco: "42,00" },
-        { nome: "Porção Família",                     desc: "Filé de frango, filé patinho, calabresa e batata frita", preco: "49,00" },
-        { nome: "Porção Tilápia com Fritas",          preco: "55,00" }
+        { nome: "Porção Família",                      desc: "Filé de frango, filé patinho, calabresa e batata frita", preco: "49,00" },
+        { nome: "Porção Tilápia com Fritas",           preco: "55,00" }
       ]
     }
   ];
@@ -314,7 +341,6 @@ body{
     return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-zA-Z0-9]+/g, "-").toLowerCase();
   }
 
-  // Header
   var topo = el("header", "topo");
   var h1 = el("h1");
   h1.textContent = LOJA.nome;
@@ -326,7 +352,6 @@ body{
 
   var wrap = el("div", "wrap");
 
-  // Nav pills
   var nav = el("nav", "nav");
   nav.setAttribute("aria-label", "Categorias");
   var lnk = el("a");
@@ -341,7 +366,6 @@ body{
   }
   wrap.appendChild(nav);
 
-  // Combos
   if (COMBOS.length) {
     var cb = el("section", "combos");
     cb.id = "combos";
@@ -352,7 +376,6 @@ body{
     wrap.appendChild(cb);
   }
 
-  // Categorias
   for (var j = 0; j < CATEGORIAS.length; j++) {
     var cat = CATEGORIAS[j];
     var sec = el("section", "cat");
@@ -364,7 +387,6 @@ body{
     wrap.appendChild(sec);
   }
 
-  // Rodapé
   var rod = el("footer", "rodape");
   rod.innerHTML = LOJA.endereco +
     " · <a href=\"tel:" + LOJA.tel.replace(/\D/g, "") + "\">" + LOJA.tel + "</a>" +

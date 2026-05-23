@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=5">
+<meta name="theme-color" content="#1a1a2e">
+<meta name="description" content="Cardápio Digital — Padaria Tradição">
+<title>Cardápio — Padaria Tradição</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#fafafa;
+  --surface:#fff;
+  --text:#1a1a2e;
+  --muted:#555;
+  --accent:#b71c1c;
+  --accent-light:#d32f2f;
+  --combo-bg:#fff8e1;
+  --combo-border:#f9a825;
+  --divider:#e0e0e0;
+  --price:#1b5e20;
+  --radius:12px;
+  --shadow:0 2px 8px rgba(0,0,0,.08);
+  --topo-h:52px;
+}
+html{
+  font-size:16px;
+  -webkit-text-size-adjust:100%;
+  scroll-behavior:smooth;
+  scroll-padding-top:calc(var(--topo-h) + 12px);
+}
+body{
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen,Ubuntu,Cantarell,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  line-height:1.45;
+  min-height:100dvh;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ── Tela de Seleção ── */
+.sel{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  min-height:100dvh;
+  padding:1.5rem;
+  text-align:center;
+}
+.sel h1{font-size:1.85rem;font-weight:800;margin-bottom:.25rem;letter-spacing:-.02em}
+.sel .sub{font-size:1.05rem;color:var(--muted);margin-bottom:2rem}
+.grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:.75rem;
+  width:100%;
+  max-width:400px;
+}
+.sel-btn{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:.5rem;
+  background:var(--surface);
+  border:2px solid var(--divider);
+  border-radius:var(--radius);
+  padding:1.25rem .75rem;
+  font-size:1.1rem;
+  font-weight:700;
+  color:var(--text);
+  cursor:pointer;
+  box-shadow:var(--shadow);
+  transition:border-color .15s,box-shadow .15s;
+  -webkit-tap-highlight-color:transparent;
+}
+.sel-btn:hover,.sel-btn:focus-visible{
+  border-color:var(--accent);
+  box-shadow:0 4px 16px rgba(183,28,28,.15);
+  outline:none;
+}
+.sel-btn .ico{font-size:2.2rem;line-height:1}
+.sel-btn .lbl{font-size:.85rem;color:var(--muted);font-weight:400}
+
+/* ── Loja (cardápio) ── */
+.loja{display:none;padding-bottom:2rem}
+.loja.on{display:block}
+
+.topo{
+  position:sticky;
+  top:0;
+  z-index:10;
+  background:var(--text);
+  color:#fff;
+  height:var(--topo-h);
+  padding:0 1rem;
+  display:flex;
+  align-items:center;
+  gap:.75rem;
+  box-shadow:0 2px 12px rgba(0,0,0,.2);
+}
+.voltar{
+  background:none;
+  border:none;
+  color:#fff;
+  font-size:1.4rem;
+  cursor:pointer;
+  min-width:44px;
+  min-height:44px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:8px;
+  -webkit-tap-highlight-color:transparent;
+}
+.voltar:focus-visible{outline:2px solid var(--accent-light);outline-offset:2px}
+.topo h2{font-size:1.15rem;font-weight:700;flex:1}
+.topo .tag{
+  font-size:.7rem;
+  background:var(--accent);
+  padding:.2rem .6rem;
+  border-radius:20px;
+  font-weight:600;
+  white-space:nowrap;
+}
+
+.wrap{padding:.75rem 1rem;max-width:600px;margin:0 auto}
+
+/* ── Navegação rápida ── */
+.nav{
+  display:flex;
+  gap:.5rem;
+  overflow-x:auto;
+  padding:.75rem 0;
+  margin-bottom:.5rem;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+}
+.nav::-webkit-scrollbar{display:none}
+.nav a{
+  flex-shrink:0;
+  padding:.45rem .8rem;
+  background:var(--surface);
+  border:1.5px solid var(--divider);
+  border-radius:20px;
+  font-size:.8rem;
+  font-weight:600;
+  color:var(--text);
+  text-decoration:none;
+  -webkit-tap-highlight-color:transparent;
+  transition:background .15s,border-color .15s,color .15s;
+}
+.nav a:hover,.nav a:focus-visible{
+  background:var(--accent);
+  color:#fff;
+  border-color:var(--accent);
+  outline:none;
+}
+
+/* ── Combos (destaque) ── */
+.combos{
+  background:var(--combo-bg);
+  border:2px solid var(--combo-border);
+  border-radius:var(--radius);
+  padding:1rem;
+  margin-bottom:1.25rem;
+}
+.combos h3{font-size:1.2rem;font-weight:800;margin-bottom:.75rem}
+.combos .preco{font-size:1.4rem}
+
+/* ── Categorias ── */
+.cat{margin-bottom:1.25rem}
+.cat h3{
+  font-size:1.1rem;
+  font-weight:800;
+  padding-bottom:.4rem;
+  margin-bottom:.6rem;
+  border-bottom:2px solid var(--accent);
+}
+
+/* ── Item ── */
+.item{
+  display:flex;
+  justify-content:space-between;
+  align-items:baseline;
+  padding:.65rem 0;
+  border-bottom:1px solid var(--divider);
+  gap:.75rem;
+}
+.item:last-child{border-bottom:none}
+.nome{font-size:1.05rem;font-weight:600;flex:1;min-width:0}
+.desc{display:block;font-size:.8rem;font-weight:400;color:var(--muted);margin-top:.1rem}
+.preco{font-size:1.3rem;font-weight:800;color:var(--price);white-space:nowrap;flex-shrink:0}
+
+.rodape{text-align:center;padding:1.5rem 1rem;font-size:.75rem;color:var(--muted)}
+
+/* ── Responsivo ── */
+@media(min-width:480px){
+  .sel h1{font-size:2.1rem}
+  .wrap{padding:1rem 1.5rem}
+  .nome{font-size:1.1rem}
+  .preco{font-size:1.4rem}
+  .combos .preco{font-size:1.55rem}
+}
+@media(min-width:768px){
+  .grid{grid-template-columns:repeat(4,1fr);max-width:700px}
+}
+@media(prefers-color-scheme:dark){
+  :root{
+    --bg:#121212;
+    --surface:#1e1e1e;
+    --text:#f0f0f0;
+    --muted:#aaa;
+    --divider:#333;
+    --combo-bg:#2a2518;
+    --combo-border:#f9a825;
+    --price:#66bb6a;
+    --shadow:0 2px 8px rgba(0,0,0,.3);
+  }
+  .topo{background:#0d0d0d}
+}
+</style>
+</head>
+<body>
+
+<main id="app">
+  <section class="sel" id="selecao" aria-label="Seleção de unidade">
+    <h1>Padaria Tradição</h1>
+    <p class="sub">Selecione a sua loja para ver o cardápio:</p>
+    <div class="grid">
+      <button class="sel-btn" data-loja="1" aria-label="Abrir cardápio da Unidade 1 — Centro">
+        <span class="ico" aria-hidden="true">🏪</span>
+        <span>Unidade 1</span>
+        <span class="lbl">Centro</span>
+      </button>
+      <button class="sel-btn" data-loja="2" aria-label="Abrir cardápio da Unidade 2 — Jardins">
+        <span class="ico" aria-hidden="true">🏪</span>
+        <span>Unidade 2</span>
+        <span class="lbl">Jardins</span>
+      </button>
+      <button class="sel-btn" data-loja="3" aria-label="Abrir cardápio da Unidade 3 — Vila Nova">
+        <span class="ico" aria-hidden="true">🏪</span>
+        <span>Unidade 3</span>
+        <span class="lbl">Vila Nova</span>
+      </button>
+      <button class="sel-btn" data-loja="4" aria-label="Abrir cardápio da Unidade 4 — Shopping">
+        <span class="ico" aria-hidden="true">🏪</span>
+        <span>Unidade 4</span>
+        <span class="lbl">Shopping</span>
+      </button>
+    </div>
+  </section>
+</main>
+
+<noscript>
+<style>.sel{display:none!important}</style>
+<p style="padding:2rem;text-align:center;font-family:system-ui;font-size:1.2rem">
+  Este cardápio requer JavaScript habilitado para funcionar.
+</p>
+</noscript>
+
+<script>
+(function(){
+  "use strict";
+
+  var LOJAS = {
+    1: {
+      nome: "Unidade 1 — Centro",
+      combos: [
+        { nome: "Combo Expresso", desc: "Café Cheio + Pão de Queijo Grande", preco: "9,00" },
+        { nome: "Combo Tradição", desc: "Pingado M + Pedaço de Bolo", preco: "15,00" },
+        { nome: "Combo Especial", desc: "Salgado Especial + Café Cheio", preco: "19,00" }
+      ],
+      categorias: [
+        {
+          titulo: "🥖 Panificação e Salgados", id: "panificacao",
+          itens: [
+            { nome: "Pão Francês", desc: "por kg", preco: "23,00" },
+            { nome: "Pão de Queijo Grande", preco: "6,00" },
+            { nome: "Salgados Comuns", preco: "12,00" },
+            { nome: "Salgados Especiais", desc: "Carne Seca / Catupiry", preco: "16,00" },
+            { nome: "Mini Pizza", preco: "15,00" }
+          ]
+        },
+        {
+          titulo: "🍔 Lanches e Refeições", id: "lanches",
+          itens: [
+            { nome: "Pão com Carne", preco: "12,00" },
+            { nome: "Lanche Natural", preco: "14,00" },
+            { nome: "Jantinha", preco: "30,00" },
+            { nome: "Caldos", preco: "20,00" }
+          ]
+        },
+        {
+          titulo: "🎂 Confeitaria", id: "confeitaria",
+          itens: [
+            { nome: "Bolo Aniversário Tradicional", desc: "por kg", preco: "85,00" },
+            { nome: "Bolo Aniversário Premium", desc: "por kg", preco: "95,00" },
+            { nome: "Bolos Caseirinhos", preco: "35,00" },
+            { nome: "Bolos Pedaço", desc: "Milho / Leite", preco: "8,00" }
+          ]
+        },
+        {
+          titulo: "🥤 Bebidas", id: "bebidas",
+          itens: [
+            { nome: "Café Copo Cheio", preco: "5,00" },
+            { nome: "Pingado M", preco: "8,00" },
+            { nome: "Coca-Cola 2L", preco: "15,00" }
+          ]
+        }
+      ]
+    },
+    2: {
+      nome: "Unidade 2 — Jardins",
+      combos: [
+        { nome: "Combo Expresso", desc: "Café Cheio + Pão de Queijo Grande", preco: "10,00" },
+        { nome: "Combo Tradição", desc: "Pingado M + Pedaço de Bolo", preco: "16,00" },
+        { nome: "Combo Especial", desc: "Salgado Especial + Café Cheio", preco: "20,00" }
+      ],
+      categorias: [
+        {
+          titulo: "🥖 Panificação e Salgados", id: "panificacao",
+          itens: [
+            { nome: "Pão Francês", desc: "por kg", preco: "24,00" },
+            { nome: "Pão de Queijo Grande", preco: "7,00" },
+            { nome: "Salgados Comuns", preco: "13,00" },
+            { nome: "Salgados Especiais", desc: "Carne Seca / Catupiry", preco: "17,00" },
+            { nome: "Mini Pizza", preco: "16,00" }
+          ]
+        },
+        {
+          titulo: "🍔 Lanches e Refeições", id: "lanches",
+          itens: [
+            { nome: "Pão com Carne", preco: "13,00" },
+            { nome: "Lanche Natural", preco: "15,00" },
+            { nome: "Jantinha", preco: "32,00" },
+            { nome: "Caldos", preco: "22,00" }
+          ]
+        },
+        {
+          titulo: "🎂 Confeitaria", id: "confeitaria",
+          itens: [
+            { nome: "Bolo Aniversário Tradicional", desc: "por kg", preco: "90,00" },
+            { nome: "Bolo Aniversário Premium", desc: "por kg", preco: "100,00" },
+            { nome: "Bolos Caseirinhos", preco: "38,00" },
+            { nome: "Bolos Pedaço", desc: "Milho / Leite", preco: "9,00" }
+          ]
+        },
+        {
+          titulo: "🥤 Bebidas", id: "bebidas",
+          itens: [
+            { nome: "Café Copo Cheio", preco: "6,00" },
+            { nome: "Pingado M", preco: "9,00" },
+            { nome: "Coca-Cola 2L", preco: "16,00" }
+          ]
+        }
+      ]
+    },
+    3: {
+      nome: "Unidade 3 — Vila Nova",
+      combos: [
+        { nome: "Combo Expresso", desc: "Café Cheio + Pão de Queijo Grande", preco: "9,00" },
+        { nome: "Combo Tradição", desc: "Pingado M + Pedaço de Bolo", preco: "14,00" },
+        { nome: "Combo Especial", desc: "Salgado Especial + Café Cheio", preco: "18,00" }
+      ],
+      categorias: [
+        {
+          titulo: "🥖 Panificação e Salgados", id: "panificacao",
+          itens: [
+            { nome: "Pão Francês", desc: "por kg", preco: "22,00" },
+            { nome: "Pão de Queijo Grande", preco: "6,00" },
+            { nome: "Salgados Comuns", preco: "11,00" },
+            { nome: "Salgados Especiais", desc: "Carne Seca / Catupiry", preco: "15,00" },
+            { nome: "Mini Pizza", preco: "14,00" }
+          ]
+        },
+        {
+          titulo: "🍔 Lanches e Refeições", id: "lanches",
+          itens: [
+            { nome: "Pão com Carne", preco: "11,00" },
+            { nome: "Lanche Natural", preco: "13,00" },
+            { nome: "Jantinha", preco: "28,00" },
+            { nome: "Caldos", preco: "19,00" }
+          ]
+        },
+        {
+          titulo: "🎂 Confeitaria", id: "confeitaria",
+          itens: [
+            { nome: "Bolo Aniversário Tradicional", desc: "por kg", preco: "82,00" },
+            { nome: "Bolo Aniversário Premium", desc: "por kg", preco: "92,00" },
+            { nome: "Bolos Caseirinhos", preco: "33,00" },
+            { nome: "Bolos Pedaço", desc: "Milho / Leite", preco: "7,00" }
+          ]
+        },
+        {
+          titulo: "🥤 Bebidas", id: "bebidas",
+          itens: [
+            { nome: "Café Copo Cheio", preco: "5,00" },
+            { nome: "Pingado M", preco: "7,00" },
+            { nome: "Coca-Cola 2L", preco: "14,00" }
+          ]
+        }
+      ]
+    },
+    4: {
+      nome: "Unidade 4 — Shopping",
+      combos: [
+        { nome: "Combo Expresso", desc: "Café Cheio + Pão de Queijo Grande", preco: "11,00" },
+        { nome: "Combo Tradição", desc: "Pingado M + Pedaço de Bolo", preco: "17,00" },
+        { nome: "Combo Especial", desc: "Salgado Especial + Café Cheio", preco: "21,00" }
+      ],
+      categorias: [
+        {
+          titulo: "🥖 Panificação e Salgados", id: "panificacao",
+          itens: [
+            { nome: "Pão Francês", desc: "por kg", preco: "25,00" },
+            { nome: "Pão de Queijo Grande", preco: "8,00" },
+            { nome: "Salgados Comuns", preco: "14,00" },
+            { nome: "Salgados Especiais", desc: "Carne Seca / Catupiry", preco: "18,00" },
+            { nome: "Mini Pizza", preco: "17,00" }
+          ]
+        },
+        {
+          titulo: "🍔 Lanches e Refeições", id: "lanches",
+          itens: [
+            { nome: "Pão com Carne", preco: "14,00" },
+            { nome: "Lanche Natural", preco: "16,00" },
+            { nome: "Jantinha", preco: "33,00" },
+            { nome: "Caldos", preco: "22,00" }
+          ]
+        },
+        {
+          titulo: "🎂 Confeitaria", id: "confeitaria",
+          itens: [
+            { nome: "Bolo Aniversário Tradicional", desc: "por kg", preco: "90,00" },
+            { nome: "Bolo Aniversário Premium", desc: "por kg", preco: "100,00" },
+            { nome: "Bolos Caseirinhos", preco: "38,00" },
+            { nome: "Bolos Pedaço", desc: "Milho / Leite", preco: "9,00" }
+          ]
+        },
+        {
+          titulo: "🥤 Bebidas", id: "bebidas",
+          itens: [
+            { nome: "Café Copo Cheio", preco: "6,00" },
+            { nome: "Pingado M", preco: "9,00" },
+            { nome: "Coca-Cola 2L", preco: "16,00" }
+          ]
+        }
+      ]
+    }
+  };
+
+  var app = document.getElementById("app");
+  var selecao = document.getElementById("selecao");
+  var lojaAtiva = null;
+
+  function el(tag, cls, attrs) {
+    var node = document.createElement(tag);
+    if (cls) node.className = cls;
+    if (attrs) {
+      for (var k in attrs) node.setAttribute(k, attrs[k]);
+    }
+    return node;
+  }
+
+  function criarItem(item) {
+    var row = el("div", "item");
+    var n = el("span", "nome");
+    n.textContent = item.nome;
+    if (item.desc) {
+      var d = el("span", "desc");
+      d.textContent = item.desc;
+      n.appendChild(d);
+    }
+    var p = el("span", "preco");
+    p.textContent = "R$\u00A0" + item.preco;
+    row.appendChild(n);
+    row.appendChild(p);
+    return row;
+  }
+
+  function renderizar(id) {
+    var dados = LOJAS[id];
+    if (!dados) return;
+
+    var sec = el("section", "loja on", { id: "loja-" + id, "aria-label": "Cardápio " + dados.nome });
+
+    var topo = el("header", "topo");
+    var btn = el("button", "voltar", { "aria-label": "Voltar para seleção de unidades" });
+    btn.innerHTML = "&#8592;";
+    btn.onclick = fechar;
+    var h2 = el("h2");
+    h2.textContent = dados.nome;
+    var tag = el("span", "tag");
+    tag.textContent = "Cardápio";
+    topo.appendChild(btn);
+    topo.appendChild(h2);
+    topo.appendChild(tag);
+    sec.appendChild(topo);
+
+    var wrap = el("div", "wrap");
+
+    var nav = el("nav", "nav", { "aria-label": "Categorias" });
+    var lnk = el("a");
+    lnk.href = "#combos-" + id;
+    lnk.textContent = "☕ Combos";
+    nav.appendChild(lnk);
+    for (var c = 0; c < dados.categorias.length; c++) {
+      var a = el("a");
+      a.href = "#" + dados.categorias[c].id + "-" + id;
+      a.textContent = dados.categorias[c].titulo;
+      nav.appendChild(a);
+    }
+    wrap.appendChild(nav);
+
+    var cb = el("div", "combos", { id: "combos-" + id });
+    var h3c = el("h3");
+    h3c.textContent = "☕ Combos Matinais (Mais Rápidos)";
+    cb.appendChild(h3c);
+    for (var i = 0; i < dados.combos.length; i++) {
+      cb.appendChild(criarItem(dados.combos[i]));
+    }
+    wrap.appendChild(cb);
+
+    for (var j = 0; j < dados.categorias.length; j++) {
+      var cat = dados.categorias[j];
+      var div = el("div", "cat", { id: cat.id + "-" + id });
+      var h3 = el("h3");
+      h3.textContent = cat.titulo;
+      div.appendChild(h3);
+      for (var k = 0; k < cat.itens.length; k++) {
+        div.appendChild(criarItem(cat.itens[k]));
+      }
+      wrap.appendChild(div);
+    }
+
+    var rod = el("footer", "rodape");
+    rod.innerHTML = "Preços sujeitos a alteração sem aviso prévio.<br>Padaria Tradição &copy; " + new Date().getFullYear();
+    wrap.appendChild(rod);
+
+    sec.appendChild(wrap);
+    app.appendChild(sec);
+    lojaAtiva = sec;
+  }
+
+  function abrir(id) {
+    if (lojaAtiva) { lojaAtiva.remove(); lojaAtiva = null; }
+    selecao.style.display = "none";
+    renderizar(id);
+    window.scrollTo(0, 0);
+    history.replaceState(null, "", "?loja=" + id);
+  }
+
+  function fechar() {
+    if (lojaAtiva) { lojaAtiva.remove(); lojaAtiva = null; }
+    selecao.style.display = "";
+    history.replaceState(null, "", location.pathname);
+  }
+
+  document.querySelector(".grid").addEventListener("click", function(e) {
+    var btn = e.target.closest("[data-loja]");
+    if (btn) abrir(parseInt(btn.dataset.loja, 10));
+  });
+
+  var p = new URLSearchParams(location.search);
+  var lid = parseInt(p.get("loja"), 10);
+  if (lid >= 1 && lid <= 4) abrir(lid);
+})();
+</script>
+
+</body>
+</html>
